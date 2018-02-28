@@ -1,4 +1,4 @@
-In [1]: import pandas as pd
+   ...:import pandas as pd
    ...: import numpy as np
    ...: from sklearn.cross_validation import train_test_split
    ...: from sklearn.metrics import roc_auc_score
@@ -10,8 +10,6 @@ In [1]: import pandas as pd
    ...: import matplotlib.pyplot as plt
    ...: train = pd.read_csv("train.csv")
    ...: test = pd.read_csv("test.csv")
-   ...: train = pd.read_csv("train.csv")
-   ...: test = pd.read_csv("test.csv")
    ...: # clean and split data^M
    ...: # remove constant columns (std = 0)^M
    ...: remove = []
@@ -20,7 +18,7 @@ In [1]: import pandas as pd
    ...:         remove.append(col)
    ...: train.drop(remove, axis=1, inplace=True)
    ...: test.drop(remove, axis=1, inplace=True)
-In [3]: # remove duplicated columns^M
+   ...:# remove duplicated columns^M
    ...: remove = []
    ...: cols = train.columns
    ...: for i in range(len(cols)-1):
@@ -40,35 +38,30 @@ In [3]: # remove duplicated columns^M
    ...: ## # Feature selection
    ...: clf = ExtraTreesClassifier(random_state=1729)
    ...: selector = clf.fit(X_train, y_train)
-In [6]: feat_imp = pd.Series(clf.feature_importances_, index = X_train.columns.values).sort_values(ascending=False)
-   ...: feat_imp[:40].plot(kind='bar', title='Feature Importances according to ExtraTreesClassifier', figsize=(12, 8))
-   ...: plt.ylabel('Feature Importance Score')
-   ...: plt.subplots_adjust(bottom=0.3)
-   ...: plt.savefig('1.png')
-   ...: plt.show()
-   ...: # clf.feature_importances_ 
-   ...: fs = SelectFromModel(selector, prefit=True)
-   ...: X_train = fs.transform(X_train)
-   ...: X_test = fs.transform(X_test)
-   ...: test = fs.transform(test)
-In [8]: pivot = int(0.8 * len(X_train))
-In [9]: X_train = np.array(X_train)
-In [10]: y = np.array(y)
-In [11]: validation_features = X_train[pivot:]
-In [12]: y_train = np.array(y_train)
-In [14]: y_test = np.array(y_test)
-In [15]: X_test = np.array(X_test)
-In [16]: print("Len validation:", len(X_test),"Len train:", len(X_train))
-In [17]: model = LogisticRegression()
-In [18]: model.fit(X_train, y_train)
-In [19]: test_m_a = model.score(X_test, y_test)
-In [20]: print(test_m_a)
-In [21]: train_m_a = model.score(X_train, y_train)
-In [22]: print(train_m_a)
+   ...:feat_imp = pd.Series(clf.feature_importances_, index = X_train.columns.values).sort_values(ascending=False)
+   ...:feat_imp[:40].plot(kind='bar', title='Feature Importances according to ExtraTreesClassifier', figsize=(12, 8))
+   ...:plt.ylabel('Feature Importance Score')
+   ...:plt.subplots_adjust(bottom=0.3)
+   ...:plt.savefig('1.png')
+   ...:plt.show()
+   ...:# clf.feature_importances_ 
+   ...:fs = SelectFromModel(selector, prefit=True)
+   ...:X_train = fs.transform(X_train)
+   ...:X_test = fs.transform(X_test)
+   ...:test = fs.transform(test)
+   ...:X_train = np.array(X_train)
+   ...:y = np.array(y)
+   ...:y_train = np.array(y_train)
+   ...:y_test = np.array(y_test)
+   ...:X_test = np.array(X_test)
+   ...:print("Len validation:", len(X_test),"Len train:", len(X_train))
+   ...:model = LogisticRegression()
+   ...:model.fit(X_train, y_train)
    ...: score=accuracy_score(y_test, model.predict(X_test))
-   ...: roc=roc_auc_score(y_test, model.predict_proba(X_test)[:,1])
+   ...: score=accuracy_score(y_train, model.predict(X_train))
+   ...: roc_test=roc_auc_score(y_test, model.predict_proba(X_test)[:,1])
+   ...: roc_train=roc_auc_score(y_train, model.predict_proba(X_train)[:,1])
    ...: cr=classification_report(y_test, model.predict(X_test))
    ...: print(score)
-   ...: print(roc)
+   ...: print("ROC_train", roc_train, "ROC_test", roc_test)
    ...: print(cr)
-
